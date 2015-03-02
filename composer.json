@@ -1,0 +1,19 @@
+{
+    "name": "digitalkrikits/pushnotifications",
+    "description": "",
+    "authors": [
+        {
+            "name": "DigitalKrikits",
+            "email": "hello@digitalkrikits.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "5.0.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Digitalkrikits\\Pushnotifications": "src/"
+        }
+    }
+}
