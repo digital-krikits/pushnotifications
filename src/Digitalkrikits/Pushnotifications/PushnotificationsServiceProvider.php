@@ -27,10 +27,10 @@ class PushnotificationsServiceProvider extends ServiceProvider {
 
     public function boot()
     {
-        $this->mergeConfigFrom(
-            __DIR__.'/../../config/app.php', 'dkpush'
-        );
 
+        $this->publishes([
+            __DIR__.'/../../config/app.php' => config_path('dkpush.php')
+        ]);
     }
 
 	/**
