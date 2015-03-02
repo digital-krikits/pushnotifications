@@ -1,4 +1,3 @@
-
 <?php namespace Digitalkrikits\Pushnotifications;
 
 use Illuminate\Support\ServiceProvider;
