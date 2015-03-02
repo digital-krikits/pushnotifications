@@ -1,6 +1,5 @@
 <?php namespace Digitalkrikits\Pushnotifications;
 
-use Digitalkrikits\Pushnotifications\Facades\Pushnotifications;
 use Illuminate\Support\ServiceProvider;
 
 class PushnotificationsServiceProvider extends ServiceProvider {
