@@ -54,6 +54,7 @@ class Pushnotifications
         if (count($this->android)) {
             $this->android();
         }
+        return $this->result;
     }
 
     private function android()
