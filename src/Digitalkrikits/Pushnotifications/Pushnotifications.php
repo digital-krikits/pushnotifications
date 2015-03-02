@@ -1,4 +1,4 @@
-<?php namespace Dikitalkrikits\Pushnotifications;
+<?php namespace Digitalkrikits\Pushnotifications;
 
 class Pushnotifications {
 
