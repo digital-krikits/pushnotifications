@@ -47,8 +47,6 @@ class Pushnotifications
             }
         }
 
-        var_dump($to);
-
         if (count($this->ios)) {
             $this->ios();
         }
