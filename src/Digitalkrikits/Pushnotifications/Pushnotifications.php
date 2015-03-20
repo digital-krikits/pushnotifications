@@ -124,16 +124,18 @@ class Pushnotifications
 
         $payload = json_encode($body);
 
-        $fp = stream_socket_client(
-            $host, $err,
-            $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
 
-        if (!$fp) {
-            $this->result['ios'][] = 'Could not connect to host';
-            return false;
-        }
 
         foreach ($this->ios as $deviceToken) {
+
+            $fp = stream_socket_client(
+                $host, $err,
+                $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
+
+            if (!$fp) {
+                $this->result['ios'][] = 'Could not connect to host';
+                return false;
+            }
 
             $msg = chr(0) . @pack('n', 32) . @pack('H*', $deviceToken) . @pack('n', strlen($payload)) . $payload;
 
@@ -188,8 +190,10 @@ class Pushnotifications
 
 
             }
+
+            fclose($fp);
         }
 
-        fclose($fp);
+
     }
 }
