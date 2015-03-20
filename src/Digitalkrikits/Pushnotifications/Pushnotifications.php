@@ -153,7 +153,7 @@ class Pushnotifications
                     $this->result['ios'][] = 'FAIL: ' . $deviceToken;
                 } elseif ($changedStreams > 0) {
 
-                    $responseBinary = fread($this->pushStream, 6);
+                    $responseBinary = fread($fp, 6);
                     if ($responseBinary !== false || strlen($responseBinary) == 6) {
 
                         if (!$responseBinary) {
@@ -166,8 +166,7 @@ class Pushnotifications
                         error_log('APN: debugPayload response - ' . print_r($response, true));
 
                         if ($response && $response['status_code'] > 0) {
-                            error_log('APN: debugPayload response - status_code:' . $response['status_code'] . ' => ' . $this->apnResonses[$response['status_code']]);
-                            $this->error = $this->apnResonses[$response['status_code']];
+                            error_log('APN: debugPayload response - status_code:' . $response['status_code']);
                             $this->result['ios'][] = 'FAIL: ' . $deviceToken;
                             continue;
                         } else {
