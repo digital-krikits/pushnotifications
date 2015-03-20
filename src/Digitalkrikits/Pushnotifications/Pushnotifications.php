@@ -142,7 +142,52 @@ class Pushnotifications
             if (!$result) {
                 $this->result['ios'][] = 'FAIL: ' . $deviceToken;
             } else {
-                $this->result['ios'][] = 'SUCCESS: ' . $deviceToken;
+
+
+                $read = [$fp];
+                $null = null;
+                $changedStreams = stream_select($read, $null, $null, 0, 2000000);
+
+                if ($changedStreams === false) {
+                    error_log('APN Error: Unabled to wait for a stream availability');
+                    $this->result['ios'][] = 'FAIL: ' . $deviceToken;
+                } elseif ($changedStreams > 0) {
+
+                    $responseBinary = fread($this->pushStream, 6);
+                    if ($responseBinary !== false || strlen($responseBinary) == 6) {
+
+                        if (!$responseBinary) {
+                            $this->result['ios'][] = 'SUCCESS: ' . $deviceToken;
+                            continue;
+                        }
+
+                        $response = @unpack('Ccommand/Cstatus_code/Nidentifier', $responseBinary);
+
+                        error_log('APN: debugPayload response - ' . print_r($response, true));
+
+                        if ($response && $response['status_code'] > 0) {
+                            error_log('APN: debugPayload response - status_code:' . $response['status_code'] . ' => ' . $this->apnResonses[$response['status_code']]);
+                            $this->error = $this->apnResonses[$response['status_code']];
+                            $this->result['ios'][] = 'FAIL: ' . $deviceToken;
+                            continue;
+                        } else {
+                            if (isset($response['status_code'])) {
+                                error_log('APN: debugPayload response - ' . print_r($response['status_code'], true));
+                                $this->result['ios'][] = 'SUCCESS: ' . $deviceToken;
+                            }
+                        }
+
+                    } else {
+                        error_log("APN: responseBinary = $responseBinary");
+                        $this->result['ios'][] = 'FAIL: ' . $deviceToken;
+                        continue;
+                    }
+                } else {
+                    $this->result['ios'][] = 'SUCCESS: ' . $deviceToken;
+                    continue;
+                }
+
+
             }
         }
 
