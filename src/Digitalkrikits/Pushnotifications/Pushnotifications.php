@@ -47,6 +47,9 @@ class Pushnotifications
             }
         }
 
+        $this->ios = array_unique($this->ios);
+        $this->android = array_unique($this->android);
+
         if (count($this->ios)) {
             $this->ios();
         }
