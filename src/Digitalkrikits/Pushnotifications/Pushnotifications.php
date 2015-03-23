@@ -128,6 +128,8 @@ class Pushnotifications
 
         foreach ($this->ios as $deviceToken) {
 
+            echo $deviceToken . ' -- ' . $this->data['story_id'] . "\n";
+
             $fp = stream_socket_client(
                 $host, $err,
                 $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
