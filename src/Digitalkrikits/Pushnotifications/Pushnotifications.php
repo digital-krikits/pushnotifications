@@ -121,7 +121,7 @@ class Pushnotifications
 
         if (count($this->data)) {
             foreach ($this->data as $key => $value) {
-                $body['aps'][$key] = $value;
+                $body[$key] = $value;
             }
         }
 
