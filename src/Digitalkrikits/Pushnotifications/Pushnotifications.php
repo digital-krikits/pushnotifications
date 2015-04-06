@@ -169,7 +169,22 @@ class Pushnotifications
             curl_close($ch);
         } catch (\Exception $e) {
         }
-        $this->result['android'] = $result;
+        $results = [];
+        if (!isset($result['results'])) {
+            foreach ($this->android as $token) {
+                $results[$token] = ['status' => 'success'];
+            }
+        } else {
+            foreach ($result['results'] as $res) {
+                $results[$res['registration_id']] = ['status' => 'fail', 'message' => $res['message']];
+            }
+            foreach ($this->android as $token) {
+                if (!array_key_exists($token, $results)) {
+                    $results[$token] = ['status' => 'success'];
+                }
+            }
+        }
+        $this->result['android'] = $results;
     }
 
     /**
