@@ -29,6 +29,11 @@ class Pushnotifications
     private $result = [];
 
     /**
+     * @var string Config group to be used
+     */
+    private $config = '';
+
+    /**
      * @var array APN response codes
      */
     private $apnResonses = [
@@ -51,6 +56,15 @@ class Pushnotifications
     public function setMessage($message)
     {
         $this->message = $message;
+    }
+
+    /**
+     * Set config group
+     * @param string $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = trim($config . '.', '.');
     }
 
     /**
@@ -104,9 +118,10 @@ class Pushnotifications
      * @param array $recipients
      * @param string $message
      * @param array $data
+     * @param null|string $config
      * @return array
      */
-    public function send($recipients = [], $message = '', $data = [])
+    public function send($recipients = [], $message = '', $data = [], $config = null)
     {
         if (count($recipients)) {
             $this->addRecipients($recipients);
@@ -116,6 +131,9 @@ class Pushnotifications
         }
         if (count($data)) {
             $this->setData($data);
+        }
+        if (!is_null($config)) {
+            $this->setConfig($config);
         }
         $this->ios = array_unique($this->ios);
         $this->android = array_unique($this->android);
@@ -134,11 +152,11 @@ class Pushnotifications
      */
     private function android()
     {
-        $api_access_key = config('dkpush.android-access-key');
+        $api_access_key = config('dkpush.' . $this->config . 'android-access-key');
 
         $msg = [
             'message' => $this->message,
-            'title' => config('dkpush.android-title')   // will be overwritten if defined in $data
+            'title' => config('dkpush.' . $this->config . 'android-title')   // will be overwritten if defined in $data
         ];
 
         if (count($this->data)) {
@@ -159,7 +177,7 @@ class Pushnotifications
 
         try {
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, config('dkpush.android-url'));
+            curl_setopt($ch, CURLOPT_URL, config('dkpush.' . $this->config . 'android-url'));
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -193,9 +211,9 @@ class Pushnotifications
      */
     private function ios()
     {
-        $passphrase = config('dkpush.ios-passphrase');
-        $host = config('dkpush.ios-host');
-        $cert = config('dkpush.ios-cert');
+        $passphrase = config('dkpush.' . $this->config . 'ios-passphrase');
+        $host = config('dkpush.' . $this->config . 'ios-host');
+        $cert = config('dkpush.' . $this->config . 'ios-cert');
 
         $message = $this->message;
 
