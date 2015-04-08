@@ -249,7 +249,7 @@ class Pushnotifications
                     if ($responseBinary !== false || strlen($responseBinary) == 6) {
 
                         if (!$responseBinary) {
-                            $this->result['ios'][$deviceToken] = ['status' => 'success'];
+                            $this->result['ios'][$deviceToken] = ['status' => 'success', 'message' => 'No response binary'];
                             continue;
                         }
 
@@ -260,7 +260,7 @@ class Pushnotifications
                             continue;
                         } else {
                             if (isset($response['status_code'])) {
-                                $this->result['ios'][$deviceToken] = ['status' => 'success'];
+                                $this->result['ios'][$deviceToken] = ['status' => 'success', 'message' => 'Status code: ' . $response['status_code']];
                             }
                         }
 
@@ -269,7 +269,7 @@ class Pushnotifications
                         continue;
                     }
                 } else {
-                    $this->result['ios'][$deviceToken] = ['status' => 'success'];
+                    $this->result['ios'][$deviceToken] = ['status' => 'success', 'message' => 'No changed streams'];
                     continue;
                 }
 
