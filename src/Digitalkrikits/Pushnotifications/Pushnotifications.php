@@ -64,7 +64,7 @@ class Pushnotifications
      */
     public function setConfig($config)
     {
-        $this->config = trim($config . '.', '.');
+        $this->config = trim($config, '.') . '.';
     }
 
     /**
