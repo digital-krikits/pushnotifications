@@ -34,6 +34,11 @@ class Pushnotifications
     private $config = '';
 
     /**
+     * @var string If it's true, it adds 'content-available' => 1 to $body['aps'] array
+     */
+    private $add_content_available = false;
+
+    /**
      * @var array APN response codes
      */
     private $apnResonses = [
@@ -96,6 +101,14 @@ class Pushnotifications
     {
         $key = key($data);
         $this->data[$key] = $data[$key];
+    }
+
+    /**
+     * @param bool $bool
+     */
+    public function setContentAvailable($bool)
+    {
+        $this->add_content_available = $bool;
     }
 
     /**
@@ -226,6 +239,10 @@ class Pushnotifications
             'sound' => 'default',
             'badge' => '+1',
         ];
+
+        if($this->add_content_available) {
+            $body['aps']['content-available'] = 1;
+        }
 
         if (count($this->data)) {
             foreach ($this->data as $key => $value) {
