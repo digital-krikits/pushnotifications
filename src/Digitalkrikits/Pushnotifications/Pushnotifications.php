@@ -14,6 +14,11 @@ class Pushnotifications
     private $data = [];
 
     /**
+     * @var array Additional aps data
+     */
+    private $apsData = [];
+
+    /**
      * @var array Android users to receive the notification
      */
     private $android = [];
@@ -32,11 +37,6 @@ class Pushnotifications
      * @var string Config group to be used
      */
     private $config = '';
-
-    /**
-     * @var string If it's true, it adds 'content-available' => 1 to $body['aps'] array
-     */
-    private $add_content_available = false;
 
     /**
      * @var array APN response codes
@@ -101,6 +101,15 @@ class Pushnotifications
     {
         $key = key($data);
         $this->data[$key] = $data[$key];
+    }
+
+    /**
+     * @param array $apsData
+     */
+    public function addApsData(array $apsData)
+    {
+        $key = key($apsData);
+        $this->apsData[$key] = $apsData[$key];
     }
 
     /**
@@ -240,8 +249,10 @@ class Pushnotifications
             'badge' => '+1',
         ];
 
-        if($this->add_content_available) {
-            $body['aps']['content-available'] = 1;
+        if (count($this->apsData)) {
+            foreach ($this->apsData as $key => $value) {
+                $body['aps'][$key] = $value;
+            }
         }
 
         if (count($this->data)) {
