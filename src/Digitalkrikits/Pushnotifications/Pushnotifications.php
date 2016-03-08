@@ -208,8 +208,12 @@ class Pushnotifications
             $result = curl_exec($ch);
             curl_close($ch);
         } catch (\Exception $e) {
+            $this->result['android'] = $e->getMessage();
+            return;
         }
+
         $results = [];
+
         if (!isset($result['results'])) {
             foreach ($this->android as $token) {
                 $results[$token] = ['status' => 'success'];
