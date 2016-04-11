@@ -9,6 +9,13 @@ class Pushnotifications
     private $message = '';
 
     /**
+     * @var string Sound filename
+     */
+    private $sound = '';
+
+
+
+    /**
      * @var array Additional data
      */
     private $data = [];
@@ -61,6 +68,15 @@ class Pushnotifications
     public function setMessage($message)
     {
         $this->message = $message;
+    }
+
+    /**
+     * Set the notification sound filename
+     * @param $sound
+     */
+    public function setSound($sound)
+    {
+        $this->sound = $sound;
     }
 
     /**
@@ -242,6 +258,7 @@ class Pushnotifications
         $cert = config('dkpush.' . $this->config . 'ios-cert');
 
         $message = $this->message;
+        $sound = $this->sound;
 
         $ctx = stream_context_create();
         stream_context_set_option($ctx, 'ssl', 'local_cert', $cert);
@@ -249,7 +266,7 @@ class Pushnotifications
 
         $body['aps'] = [
             'alert' => $message,
-            'sound' => 'default',
+            'sound' => $sound ? $sound : 'default',
             'badge' => '+1',
         ];
 
