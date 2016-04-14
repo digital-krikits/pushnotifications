@@ -13,7 +13,10 @@ class Pushnotifications
      */
     private $sound = '';
 
-
+    /**
+     * @var string send apn badge +1 or 0
+     */
+    private $countBadge = true;
 
     /**
      * @var array Additional data
@@ -77,6 +80,15 @@ class Pushnotifications
     public function setSound($sound)
     {
         $this->sound = $sound;
+    }
+
+    /**
+     * Sets the countBadge variable
+     * @param $countBadge
+     */
+    public function setCountBadge($countBadge)
+    {
+        $this->countBadge = $countBadge;
     }
 
     /**
@@ -267,7 +279,7 @@ class Pushnotifications
         $body['aps'] = [
             'alert' => $message,
             'sound' => $sound ? $sound : 'default',
-            'badge' => '+1',
+            'badge' => $this->countBadge ? '+1' : 0,
         ];
 
         if (count($this->apsData)) {
